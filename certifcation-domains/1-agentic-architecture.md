@@ -315,19 +315,6 @@ Start fresh, or fork and re-check, when:
 
 ---
 
-## What was corrected from the original guide
-
-1. Removed unsupported claims about official exam weighting and task-statement count.
-2. Replaced version-specific sample model names with version-neutral examples.
-3. Updated tool terminology to the current Claude Code `Agent` tool instead of presenting `Task` as the current canonical Claude Code name.
-4. Removed the fixed claim that the hook catalog contains exactly 30 events. The official list is evolving, so the event names and purposes matter more than a memorized count.
-5. Clarified the difference between client tools and Anthropic-run server tools.
-6. Added Anthropic's current tool-result ordering requirement.
-7. Corrected session language: sessions preserve conversation history, not filesystem state.
-8. Marked recommended architecture patterns as recommendations rather than official API guarantees.
-
----
-
 ## Practice questions
 
 ### Question 1
