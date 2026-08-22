@@ -116,13 +116,26 @@ When returning multiple results, put the `tool_result` blocks first in the user 
 
 A coordinator can divide a large task among specialized subagents, then combine their results.
 
-```text
-                 Coordinator
-              /       |       \
-         Research   Review   Synthesis
-         subagent  subagent   subagent
-```
+```mermaid
+flowchart TD
+    U["Incoming task"] --> C["Coordinator"]
 
+    C -->|"full context: task + constraints<br/>+ facts + expected output"| R["Research subagent"]
+    C -->|"full context"| V["Review subagent"]
+    C -->|"full context"| S["Synthesis subagent"]
+
+    R --> CH{"Coverage check<br/>before synthesis"}
+    V --> CH
+    S --> CH
+
+    CH -->|"parts of the request missing<br/>or sources disagree"| C
+    CH -->|"coverage confirmed"| OUT["Structured handoff"]
+
+    OUT --> J["{ summary, findings[],<br/>open_questions[], recommended_next_step }"]
+
+    style CH fill:#fff3cd,stroke:#856404
+    style OUT fill:#d4edda,stroke:#28a745
+```
 A useful coordinator should:
 
 - divide the task into clear pieces;
