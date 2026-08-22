@@ -26,21 +26,28 @@ The main ideas are:
 4. If Claude requested a client tool, run it and send back a matching `tool_result`.
 5. Repeat until Claude finishes or another stop condition requires handling.
 
-```text
-User request + tools
-        |
-        v
-Claude response
-        |
-        v
-Check stop_reason
-   |              |
-tool_use       end_turn
-   |              |
-run tool       show answer
-send result       stop
-   |
-   +---- repeat
+```mermaid
+flowchart TD
+    A["User request + tool definitions"] --> B["Send to Claude"]
+    B --> C["Claude response"]
+    C --> D{"Check stop_reason"}
+
+    D -->|"tool_use"| E["Run the client tool"]
+    E --> F["Send matching tool_result"]
+    F --> B
+
+    D -->|"end_turn"| G["Use the response — done"]
+    D -->|"max_tokens"| H["Incomplete — raise limit or continue"]
+    D -->|"stop_sequence"| I["Check which sequence fired"]
+    D -->|"pause_turn"| J["Send assistant content back to continue"]
+    J --> B
+    D -->|"refusal"| K["Read stop_details, apply fallback"]
+    D -->|"model_context_window_exceeded"| L["Treat response as truncated"]
+
+    style G fill:#d4edda,stroke:#28a745
+    style H fill:#f8d7da,stroke:#dc3545
+    style K fill:#f8d7da,stroke:#dc3545
+    style L fill:#f8d7da,stroke:#dc3545
 ```
 
 ### Important `stop_reason` values
